@@ -522,10 +522,12 @@
                             </div>
                             <div class="input-group">
                                 <i class="fas fa-building input-icon"></i>
-                                <select id="department" name="department" required>
+                                <select id="department" name="department" onchange="updateDesignations()" required>
                                     <option value="" disabled selected></option>
                                     <option value="Sales">Sales</option>
-                                    <option value="Service">Service</option>
+                                    <option value="Service - Reception">Service - Reception</option>
+                                    <option value="Service - Workshop">Service - Workshop</option>
+                                    <option value="Service - Washing">Service - Washing</option>
                                     <option value="U Trust">U Trust</option>
                                     <option value="Spares">Spares</option>
                                     <option value="HR">HR</option>
@@ -537,15 +539,18 @@
                                     <option value="Accessories">Accessories</option>
                                     <option value="Civil">Civil</option>
                                     <option value="Finance">Finance</option>
+                                    <option value="DCTC">DCTC</option>
                                     <option value="House Keeping">House Keeping</option>
                                     <option value="Insurance">Insurance</option>
-                                    <option value="Other">Other Option</option>
+                                    <option value="Other Option">Other Option</option>
                                 </select>
                                 <label for="department">Department</label>
                             </div>
                             <div class="input-group md:col-span-2">
                                 <i class="fas fa-id-badge input-icon"></i>
-                                <input type="text" id="designation" name="designation" placeholder=" " required>
+                                <select id="designation" name="designation" required>
+                                    <option value="" disabled selected></option>
+                                </select>
                                 <label for="designation">Designation</label>
                             </div>
                         </div>
@@ -824,8 +829,26 @@
         const branchData = {
             'Toyota': ['Tiruppur', 'Coimbatore', 'Erode', 'Gopi', 'Kumbakonam', 'Nilgiris', 'Pollachi', 'Salem', 'Trichy', 'Thanjavur', 'Mettupalayam', 'Madhampatti', 'Bhavani', 'Dharapuram', 'Udumalpet', 'Kangeyam', 'Dharmapuri', 'Ariyalur', 'Perambalur', 'Pattukottai', 'Karur', 'Other Option'],
             'Ather': ['Kavundampalayam', 'Hosur', 'Madurai', 'Krishnagiri', 'Karaikudi', 'Sivakasi', 'Theni', 'Coimbatore', 'Mettupalayam', 'Kumbakonam', 'Pollachi', 'Thanjavur'],
-            'Eicher': ['Kavundampalayam', 'Head Office','Arasur','Palladam', 'Erode', 'Echanaari'],
+            'Eicher': ['Palladam', 'Erode', 'Echanaari'],
             'AFS': ['Tiruppur', 'Coimbatore', 'Erode', 'Gopi', 'Kumbakonam', 'Nilgiris', 'Pollachi', 'Salem', 'Trichy', 'Thanjavur', 'Mettupalayam', 'Madhampatti', 'Bhavani', 'Dharapuram', 'Udumalpet', 'Kangeyam', 'Dharmapuri', 'Ariyalur', 'Perambalur', 'Pattukottai', 'Karur', 'Kavundampalayam', 'Hosur', 'Madurai', 'Krishnagiri', 'Karaikudi', 'Sivakasi', 'Theni', 'Palladam', 'Echanaari', 'Other Option']
+        };
+
+        const designationData = {
+            'Service - Reception': ['LOBY', 'SERVICE ADVISOR', 'TEAM LEADER', 'MANAGER', 'SUPPORT STAFF', 'GMCS', 'BRANCH HEAD', 'AGM', 'DGM', 'DM', 'AM'],
+            'Service - Workshop': ['MANAGER', 'JOB CONTROLER', 'TECHNICAL LEADER', 'CGT', 'TECHNICIAN', 'QUALITY CONTROLER'],
+            'Service - Washing': ['SUPERVAISOR', 'QUALITY CONTROLER', 'Washing TECHNICIAN'],
+            'Civil': ['SECURITY', 'ELECTRICIAN', 'SWEEPER'],
+            'Sales': ['SALES CONSULTANT', 'MANAGER', 'TEAM LEADER', 'TECHNICIAN', 'ACCESSORIES', 'SUPPORT STAFF', 'SWEEPER'],
+            'U Trust': ['MANAGER', 'TEAM LEADER', 'PROCUREMENT OFFICER'],
+            'Admin': ['CEO', 'VP', 'FOM', 'PRESIDENT', 'GROUP HEAD', 'ZONE HEAD'],
+            'Accounts': ['MANAGER', 'TEAM LEADER', 'ACCOUNTS STAFF', 'SUPPORT STAFF'],
+            'HR': ['MANAGER', 'TEAM LEADER', 'HR EXECUTIVE', 'SUPPORT STAFF'],
+            'DCAC': ['MANAGER', 'TEAM LEADER', 'CALLCENTER EXECUTIVE', 'SUPPORT STAFF'],
+            'EDP': ['EDP EXECUTIVE', 'MANAGER', 'TEAM LEADER'],
+            'Insurance': ['MANAGER', 'TEAM LEADER', 'RUNNER', 'SUPPORT STAFF'],
+            'DCTC': ['MANAGER', 'TEAM LEADER', 'SUPPORT STAFF', 'GROUP TECHNICAL', 'ZONE TECHNICAL'],
+            'Finance': ['MANAGER', 'TEAM LEADER', 'SUPPORT STAFF', 'FINANCE EXECUTIVE'],
+            'Other Option': ['Other']
         };
 
         window.updateBranches = () => {
@@ -842,6 +865,36 @@
                     option.value = branch;
                     option.textContent = branch;
                     branchSelect.appendChild(option);
+                });
+            }
+        };
+
+        window.updateDesignations = () => {
+            const deptSelect = document.getElementById('department');
+            const desigSelect = document.getElementById('designation');
+            const selectedDept = deptSelect.value;
+
+            // Current value if editing
+            const currentValue = desigSelect.value;
+
+            // Clear current designations
+            desigSelect.innerHTML = '<option value="" disabled selected></option>';
+
+            if (designationData[selectedDept]) {
+                designationData[selectedDept].forEach(desig => {
+                    const option = document.createElement('option');
+                    option.value = desig;
+                    option.textContent = desig;
+                    desigSelect.appendChild(option);
+                });
+            } else {
+                // Default options for other departments if no data provided
+                const defaultOptions = ['Manager', 'Team Leader', 'Executive', 'Staff', 'Other'];
+                defaultOptions.forEach(desig => {
+                    const option = document.createElement('option');
+                    option.value = desig;
+                    option.textContent = desig;
+                    desigSelect.appendChild(option);
                 });
             }
         };
@@ -911,6 +964,7 @@
             document.getElementById('fullName').value = data.fullName || '';
             document.getElementById('mobile').value = data.mobile || '';
             document.getElementById('department').value = data.department || '';
+            updateDesignations();
             document.getElementById('designation').value = data.designation || '';
 
             // Health Insurance
@@ -1992,6 +2046,5 @@
         };
     </script>
 </body>
-
 
 </html>
