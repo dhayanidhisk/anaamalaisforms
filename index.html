@@ -522,7 +522,7 @@
                             </div>
                             <div class="input-group">
                                 <i class="fas fa-building input-icon"></i>
-                                <select id="department" name="department" onchange="updateDesignations()" required>
+                                <select id="department" name="department" required>
                                     <option value="" disabled selected></option>
                                     <option value="Sales">Sales</option>
                                     <option value="Service - Reception">Service - Reception</option>
@@ -869,9 +869,10 @@
         };
 
         window.updateDesignations = () => {
-            const deptSelect = document.getElementById('department');
             const desigSelect = document.getElementById('designation');
-            const selectedDept = deptSelect.value;
+            
+            // Get all unique designations from the designationData object
+            const allDesignations = Array.from(new Set(Object.values(designationData).flat())).sort();
 
             // Current value if editing
             const currentValue = desigSelect.value;
@@ -879,24 +880,21 @@
             // Clear current designations
             desigSelect.innerHTML = '<option value="" disabled selected></option>';
 
-            if (designationData[selectedDept]) {
-                designationData[selectedDept].forEach(desig => {
-                    const option = document.createElement('option');
-                    option.value = desig;
-                    option.textContent = desig;
-                    desigSelect.appendChild(option);
-                });
-            } else {
-                // Default options for other departments if no data provided
-                const defaultOptions = ['Manager', 'Team Leader', 'Executive', 'Staff', 'Other'];
-                defaultOptions.forEach(desig => {
-                    const option = document.createElement('option');
-                    option.value = desig;
-                    option.textContent = desig;
-                    desigSelect.appendChild(option);
-                });
+            allDesignations.forEach(desig => {
+                const option = document.createElement('option');
+                option.value = desig;
+                option.textContent = desig;
+                desigSelect.appendChild(option);
+            });
+            
+            // Restore current value if it was already selected
+            if (currentValue) {
+                desigSelect.value = currentValue;
             }
         };
+
+        // Initial population of designations
+        updateDesignations();
 
         userEditModal.onclick = (e) => {
             if (e.target === userEditModal) {
