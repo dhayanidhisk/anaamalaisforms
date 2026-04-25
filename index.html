@@ -835,7 +835,7 @@
         const designationData = {
             'Service - Reception': ['LOBY', 'SERVICE ADVISOR', 'TEAM LEADER', 'MANAGER', 'SUPPORT STAFF', 'GMCS', 'BRANCH HEAD', 'AGM', 'DGM', 'DM', 'AM'],
             'Service - Workshop': ['MANAGER', 'JOB CONTROLER', 'TECHNICAL LEADER', 'CGT', 'TECHNICIAN', 'QUALITY CONTROLER'],
-            'Service - Washing': ['SUPERVAISOR', 'QUALITY CONTROLER', 'Washing TECHNICIAN'],
+            'Service - Washing': ['SUPERVAISOR', 'QUALITY CONTROLER', 'WASHING TECHNICIAN'],
             'Civil': ['SECURITY', 'ELECTRICIAN', 'SWEEPER'],
             'Sales': ['SALES CONSULTANT', 'MANAGER', 'TEAM LEADER', 'TECHNICIAN', 'ACCESSORIES', 'SUPPORT STAFF', 'SWEEPER'],
             'U Trust': ['MANAGER', 'TEAM LEADER', 'PROCUREMENT OFFICER'],
@@ -847,6 +847,7 @@
             'Insurance': ['MANAGER', 'TEAM LEADER', 'RUNNER', 'SUPPORT STAFF'],
             'DCTC': ['MANAGER', 'TEAM LEADER', 'SUPPORT STAFF', 'GROUP TECHNICAL', 'ZONE TECHNICAL'],
             'Finance': ['MANAGER', 'TEAM LEADER', 'SUPPORT STAFF', 'FINANCE EXECUTIVE'],
+            'Spares': ['PARTS PICKER', 'MANAGER', 'TEAM LEADER', 'SUPPORT STAFF'],
             'Other Option': ['Other']
         };
 
@@ -870,7 +871,7 @@
 
         window.updateDesignations = () => {
             const desigSelect = document.getElementById('designation');
-            
+
             // Get all unique designations from the designationData object
             const allDesignations = Array.from(new Set(Object.values(designationData).flat())).sort();
 
@@ -886,7 +887,7 @@
                 option.textContent = desig;
                 desigSelect.appendChild(option);
             });
-            
+
             // Restore current value if it was already selected
             if (currentValue) {
                 desigSelect.value = currentValue;
